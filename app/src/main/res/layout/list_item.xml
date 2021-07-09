@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/list_frame_item"
+    android:background="@color/team_blue_light"
+    android:layout_margin="4dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/predictedMatchTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                tools:text="Dallas Cowboys vs. Tampa Bay Buccaneers" />
+
+
+           <LinearLayout
+            android:id="@+id/logosLayout"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+               <ImageView
+                   android:id="@+id/imageAway"
+                   android:layout_width="104dp"
+                   android:layout_height="88dp"
+                   android:layout_weight="1"
+                   android:scaleType="fitCenter"
+                   android:src="@drawable/tampa_bay_buccaneers"
+                   android:transitionName="image" />
+
+
+
+               <LinearLayout
+                   android:id="@+id/infoLayout"
+                   android:layout_weight="1"
+                   android:orientation="horizontal"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+                       android:id="@+id/predictedScore"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:textAlignment="center"
+                       android:textColor="@color/white"
+                       android:textSize="19sp"
+                       android:textStyle="bold"
+                       tools:text="46.5" />
+
+               </LinearLayout>
+
+
+               <ImageView
+                   android:id="@+id/imageHome"
+                   android:layout_width="118dp"
+                   android:layout_height="94dp"
+                   android:layout_marginStart="16dp"
+                   android:layout_weight="1"
+                   android:scaleType="fitCenter"
+                   android:src="@drawable/dallas_cowboys" />
+
+
+           </LinearLayout>
+
+
+
+    </LinearLayout>
+
+          <LinearLayout
+              android:layout_weight="2"
+            android:id="@+id/titleLayoutBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal">
+
+
+              <TextView
+                  android:id="@+id/awayScore"
+                  android:layout_weight="1"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="center"
+                  android:textColor="@color/white"
+                  android:textSize="16sp"
+                  android:textStyle="bold"
+                  tools:text="41.6" />
+
+
+              <TextView
+                  android:id="@+id/homeScore"
+                  android:layout_weight="1"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textAlignment="center"
+                  android:textColor="@color/white"
+                  android:textStyle="bold"
+                  android:textSize="16sp"
+                  tools:text="13.6" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
