@@ -51,7 +51,7 @@ class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda): RecyclerView.
            binding.imageHome.setImageResource(imageResolverId(item.homeTeam.toString()))
            binding.awayScore.text = item.awayScore.toString()
            binding.homeScore.text = item.homeScore.toString()
-           binding.predictedMatchTitle.text = item.awayTeam + " vs " + item.homeTeam
+           binding.predictedMatchTitle.text = item.awayTeam + " @ " + item.homeTeam
            binding.predictedScore.text = item.total.toString()
         }
 

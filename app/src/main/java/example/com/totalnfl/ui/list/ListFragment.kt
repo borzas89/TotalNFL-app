@@ -1,9 +1,14 @@
 package example.com.totalnfl.ui.list
 
+import android.R
+import android.R.attr.country
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,8 +23,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -57,6 +63,21 @@ class ListFragment : Fragment() {
         attachUI()
 
         loadData()
+
+        creatingWeekSelector()
+
+    }
+
+    private fun creatingWeekSelector() {
+        //Creating the ArrayAdapter instance having the weeks list
+        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireContext(), R.layout.simple_spinner_item, viewModel.getWeeksList()
+        )
+        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+        binding.weekSpinner.adapter = arrayAdapter
+        binding.weekSpinner.setSelection(0)
+        binding.weekSpinner.onItemSelectedListener = this
+
     }
 
 
@@ -83,6 +104,14 @@ class ListFragment : Fragment() {
     override fun onDestroyView(){
         super.onDestroyView()
         bag.clear()
+    }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        viewModel.filterWeek.onNext(position + 1)
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+
     }
 
 }

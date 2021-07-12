@@ -6,19 +6,24 @@
     <data>
         <import type="android.view.View" />
         <variable
-            name="viewmodel"
+            name="viewModel"
             type="example.com.totalnfl.ui.list.ListViewModel"/>
 
     </data>
     <LinearLayout
-        android:background="@color/team_blue_light"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Spinner
+            android:id="@+id/weekSpinner"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"/>
+
         <ProgressBar
             android:id="@+id/progressBar"
-            android:visibility="@{viewmodel.isLoadingProgress() ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.isLoadingProgress() ? View.VISIBLE : View.GONE}"
             android:layout_width="match_parent"
             style="?android:attr/progressBarStyleLarge"
             android:indeterminateTint="@color/purple_500"
