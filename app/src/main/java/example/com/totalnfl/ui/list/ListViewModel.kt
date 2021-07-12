@@ -26,12 +26,12 @@ class ListViewModel @Inject constructor(
 
     fun getWeeksList(): List<String> {
         return listOf("Week 1", "Week 2", "Week 3", "Week 4", "Week 5",
-            "Week 6")
+            "Week 6", "Week 7", "Week 8", "Week 9")
     }
 
     init {
         filterWeek.subscribe {
-           filterMatches()
+           gettingPreMatchesByWeek()
         }.addTo(bag)
     }
 
@@ -48,6 +48,25 @@ class ListViewModel @Inject constructor(
 
                 }, onError = {
 
+                }
+            )
+
+    }
+
+    fun gettingPreMatchesByWeek(){
+        api.getPredictedRegMatchesByWeek(
+            filterWeek.value.toString())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(applySingleTransformers())
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = { result ->
+                    when (result) {
+                        result -> predictions.accept(result)
+                    }
+
+                }, onError = {
+                    Log.d("Error",it.message.toString())
                 }
             )
 

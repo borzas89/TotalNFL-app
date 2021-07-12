@@ -9,6 +9,8 @@ import example.com.totalnfl.data.PredictedMatch
 import example.com.totalnfl.databinding.ListItemBinding
 import example.com.totalnfl.util.imageResolverId
 import example.com.totalnfl.util.onClick
+import java.text.SimpleDateFormat
+import java.util.*
 
 typealias ItemClickedlambda = (v: View, position: Int) -> Unit
 
@@ -53,7 +55,9 @@ class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda): RecyclerView.
            binding.homeScore.text = item.homeScore.toString()
            binding.predictedMatchTitle.text = item.awayTeam + " @ " + item.homeTeam
            binding.predictedScore.text = item.total.toString()
+
         }
+
 
    }
 

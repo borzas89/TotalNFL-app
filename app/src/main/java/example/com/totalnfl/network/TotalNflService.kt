@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import java.util.*
 
 interface TotalNflService {
@@ -17,6 +18,12 @@ interface TotalNflService {
 
     @GET("predicted-reg-matches/")
     fun getPredictedRegMatches(): Single<List<PredictedMatch>>
+
+    @GET("predicted-pre-matches/week/{week}/")
+    fun getPredictedPreMatchesByWeek(@Path("week") week: String): Single<List<PredictedMatch>>
+
+    @GET("predicted-reg-matches/week/{week}/")
+    fun getPredictedRegMatchesByWeek(@Path("week") week: String): Single<List<PredictedMatch>>
 
     companion object {
         private const val BASE_URL = "https://totalnfl-server.herokuapp.com/api/v2/"

@@ -2,6 +2,7 @@ package example.com.totalnfl.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import java.util.*
 
 @JsonClass(generateAdapter = true)
 data class PredictedMatch (
@@ -27,7 +28,7 @@ data class PredictedMatch (
     @Json( name ="week")
     var week: Int,
     @Json( name ="matchDate")
-    var matchDate: String,
+    var matchDate: Date,
     @Json( name = "season")
     var season: String
 
