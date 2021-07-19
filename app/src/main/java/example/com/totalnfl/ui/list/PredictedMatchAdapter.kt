@@ -1,10 +1,12 @@
 package example.com.totalnfl.ui.list
 
+import android.annotation.SuppressLint
 import android.content.ClipData.Item
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import example.com.totalnfl.R
 import example.com.totalnfl.data.PredictedMatch
 import example.com.totalnfl.databinding.ListItemBinding
 import example.com.totalnfl.util.imageResolverId
@@ -41,13 +43,14 @@ class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda): RecyclerView.
    inner class ViewHolder(private val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
        init {
-           binding.infoLayout.onClick {
+           binding.listFrameItem.onClick {
                val adapterPosition = adapterPosition.takeIf { it >= 0 } ?: return@onClick
                onItemClicked.invoke(it,adapterPosition)
            }
 
        }
 
+       @SuppressLint("ResourceAsColor")
        fun bind(item: PredictedMatch) {
            binding.imageAway.setImageResource(imageResolverId(item.awayTeam.toString()))
            binding.imageHome.setImageResource(imageResolverId(item.homeTeam.toString()))
@@ -55,6 +58,11 @@ class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda): RecyclerView.
            binding.homeScore.text = item.homeScore.toString()
            binding.predictedMatchTitle.text = item.awayTeam + " @ " + item.homeTeam
            binding.predictedScore.text = item.total.toString()
+
+           binding.winPercentage.winHomeFloat = item.homeWinPercentage.toFloat()
+           binding.winPercentage.winAwayFloat = item.awayWinPercentage.toFloat()
+
+
 
         }
 

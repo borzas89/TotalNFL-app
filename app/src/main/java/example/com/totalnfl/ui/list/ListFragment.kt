@@ -69,7 +69,6 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun creatingWeekSelector() {
-        //Creating the ArrayAdapter instance having the weeks list
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireContext(), R.layout.simple_spinner_item, viewModel.getWeeksList()
         )
@@ -97,8 +96,7 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun rowTapped(position: Int) {
-        println(adapter.predictions.get(position))
-
+        navigator.navigateToDetail(adapter.predictions.get(position).id.toLong())
     }
 
     override fun onDestroyView(){
@@ -111,7 +109,6 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
-
     }
 
 }

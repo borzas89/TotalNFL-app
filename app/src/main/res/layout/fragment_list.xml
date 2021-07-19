@@ -10,25 +10,28 @@
             type="example.com.totalnfl.ui.list.ListViewModel"/>
 
     </data>
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="@{viewModel.isLoadingProgress() ? View.VISIBLE : View.GONE}"
+            android:layout_width="match_parent"
+            android:indeterminateTint="@color/purple_500"
+            android:layout_gravity="center_vertical"
+            android:layout_height="150dp"/>
+
+
 
         <Spinner
             android:id="@+id/weekSpinner"
             android:padding="12dp"
             android:layout_width="match_parent"
             android:layout_height="80dp"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:visibility="@{viewModel.isLoadingProgress() ? View.VISIBLE : View.GONE}"
-            android:layout_width="match_parent"
-            style="@style/Widget.AppCompat.ProgressBar"
-            android:indeterminateTint="@color/purple_500"
-            android:layout_gravity="center_vertical"
-            android:layout_height="150dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/predictionRecyclerView"

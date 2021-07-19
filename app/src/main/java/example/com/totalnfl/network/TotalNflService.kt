@@ -25,6 +25,9 @@ interface TotalNflService {
     @GET("predicted-reg-matches/week/{week}/")
     fun getPredictedRegMatchesByWeek(@Path("week") week: String): Single<List<PredictedMatch>>
 
+    @GET("predicted-reg-matches/{id}/")
+    fun getPredictedMatchById(@Path("id") id: String): Single<PredictedMatch>
+
     companion object {
         private const val BASE_URL = "https://totalnfl-server.herokuapp.com/api/v2/"
 

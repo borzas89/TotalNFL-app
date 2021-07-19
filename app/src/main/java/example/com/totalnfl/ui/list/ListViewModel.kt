@@ -7,6 +7,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import example.com.totalnfl.arch.BaseViewModel
 import example.com.totalnfl.data.PredictedMatch
+import example.com.totalnfl.network.OddsApiService
 import example.com.totalnfl.network.TotalNflService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -18,15 +19,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private var api: TotalNflService
+    private var totalNflService: TotalNflService
 ): BaseViewModel() {
     val filterWeek :  BehaviorSubject<Int> = BehaviorSubject.createDefault(1)
     val predictions = BehaviorRelay.createDefault(listOf<PredictedMatch>())
+
     private val bag = CompositeDisposable()
 
     fun getWeeksList(): List<String> {
         return listOf("Week 1", "Week 2", "Week 3", "Week 4", "Week 5",
-            "Week 6", "Week 7", "Week 8", "Week 9")
+            "Week 6", "Week 7", "Week 8", "Week 9", "Week 10",
+                "Week 11", "Week 12", "Week 13", "Week 14", "Week 15",
+                "Week 16", "Week 17", "Week 18")
     }
 
     init {
@@ -35,8 +39,9 @@ class ListViewModel @Inject constructor(
         }.addTo(bag)
     }
 
+
     fun filterMatches(){
-        api.getPredictedRegMatches().observeOn(AndroidSchedulers.mainThread())
+        totalNflService.getPredictedRegMatches().observeOn(AndroidSchedulers.mainThread())
             .compose(applySingleTransformers())
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -54,7 +59,7 @@ class ListViewModel @Inject constructor(
     }
 
     fun gettingPreMatchesByWeek(){
-        api.getPredictedRegMatchesByWeek(
+        totalNflService.getPredictedRegMatchesByWeek(
             filterWeek.value.toString())
             .observeOn(AndroidSchedulers.mainThread())
             .compose(applySingleTransformers())
