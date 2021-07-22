@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import example.com.totalnfl.network.OddsApiService
 import example.com.totalnfl.network.TotalNflService
 import javax.inject.Singleton
 
@@ -15,4 +16,9 @@ class NetworkModule {
     @Provides
     fun provideTotalNflService(): TotalNflService =
         TotalNflService.create()
+
+    @Singleton
+    @Provides
+    fun provideOddsApiService(): OddsApiService =
+            OddsApiService.create()
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import example.com.totalnfl.arch.BaseViewModel
+import example.com.totalnfl.data.Bookmaker
+import example.com.totalnfl.data.OddsApiResponse
 import example.com.totalnfl.data.PredictedMatch
 import example.com.totalnfl.network.OddsApiService
 import example.com.totalnfl.network.TotalNflService
@@ -19,10 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private var totalNflService: TotalNflService
+    private var totalNflService: TotalNflService,
+    private var oddsApiService: OddsApiService
 ): BaseViewModel() {
     val filterWeek :  BehaviorSubject<Int> = BehaviorSubject.createDefault(1)
     val predictions = BehaviorRelay.createDefault(listOf<PredictedMatch>())
+    val odds = BehaviorRelay.createDefault(listOf<OddsApiResponse>())
 
     private val bag = CompositeDisposable()
 
@@ -39,6 +43,20 @@ class ListViewModel @Inject constructor(
         }.addTo(bag)
     }
 
+    fun gettingOddsForMatches() {
+        oddsApiService.getOddsForMatches().observeOn(AndroidSchedulers.mainThread())
+        .compose(applySingleTransformers())
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = { result ->
+                    when (result) {
+                        result -> odds.accept(result)
+                        }
+                  }, onError = {
+                    Log.d("ODDS_API", it.message.toString())
+                }
+            )
+    }
 
     fun filterMatches(){
         totalNflService.getPredictedRegMatches().observeOn(AndroidSchedulers.mainThread())
