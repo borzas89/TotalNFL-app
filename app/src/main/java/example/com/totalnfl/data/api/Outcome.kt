@@ -1,4 +1,4 @@
-package example.com.totalnfl.data
+package example.com.totalnfl.data.api
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
