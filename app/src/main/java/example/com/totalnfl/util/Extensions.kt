@@ -2,10 +2,6 @@ package example.com.totalnfl.util
 
 import android.view.View
 import example.com.totalnfl.R
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.HashMap
-
 
 fun imageResolverId(key: String) : Int {
     val teamsMap: MutableMap<String, Int> = HashMap()
@@ -42,12 +38,11 @@ fun imageResolverId(key: String) : Int {
     teamsMap["New York Giants"] = R.drawable.new_york_giants
     teamsMap["New York Jets"] = R.drawable.new_york_jets
 
-    return teamsMap.get(key)!!.toInt()
-}
+    if(key.equals(null)){
+        return R.drawable.nfl_icon
+    }
 
-fun toSimpleString(date: Date) : String {
-    val format = SimpleDateFormat("yyyy dd MM")
-    return format.format(date)
+    return teamsMap[key]!!.toInt()
 }
 
 fun View.onClick(onClickListener: (View) -> Unit) {

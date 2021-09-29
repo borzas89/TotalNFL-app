@@ -14,8 +14,8 @@ class AppNavigatorImpl @Inject constructor(
         Navigation.findNavController(activity, R.id.nav_host_fragment)
     }
 
-    override fun navigateToDetail(id: Long) {
-        navController.navigate(ListFragmentDirections.actionListFragmentToDetailFragment(id))
+    override fun navigateToDetail(id: Long, awayTeam: String, homeTeam: String) {
+        navController.navigate(ListFragmentDirections.actionListFragmentToDetailFragment(id, awayTeam, homeTeam))
     }
 
     override fun popBackStack() {

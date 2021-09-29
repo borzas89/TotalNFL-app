@@ -1,14 +1,12 @@
 package example.com.totalnfl.ui.list
 
 import android.R
-import android.R.attr.country
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,7 +20,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -44,15 +41,15 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 
-    private fun loadData(){
+    private fun loadData() {
         viewModel.predictions.observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe { list -> adapter.updateData(list)}
+            .subscribe { list -> adapter.updateData(list) }
             .disposedBy(bag)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +76,6 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
-
     private fun attachUI() {
         val linearLayoutManager = LinearLayoutManager(context)
         val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
@@ -96,10 +92,14 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun rowTapped(position: Int) {
-        navigator.navigateToDetail(adapter.predictions.get(position).id.toLong())
+        val id = adapter.predictions[position].id.toLong()
+        val awayTeam = adapter.predictions[position].awayTeam
+        val homeTeam = adapter.predictions[position].homeTeam
+
+        navigator.navigateToDetail(id, awayTeam, homeTeam)
     }
 
-    override fun onDestroyView(){
+    override fun onDestroyView() {
         super.onDestroyView()
         bag.clear()
     }
