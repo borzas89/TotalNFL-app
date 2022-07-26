@@ -12,17 +12,24 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.prolificinteractive.materialcalendarview.CalendarDay
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import example.com.totalnfl.databinding.FragmentListBinding
 import example.com.totalnfl.navigator.AppNavigator
+import example.com.totalnfl.ui.detail.DetailBottomSheetDialogFragment
 import example.com.totalnfl.util.disposedBy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import org.threeten.bp.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class ListFragment : Fragment(), OnDateSelectedListener {
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -31,9 +38,6 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     lateinit var adapter: PredictedMatchAdapter
     lateinit var recyclerView: RecyclerView
-
-    @Inject
-    lateinit var navigator: AppNavigator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,23 +61,12 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         recyclerView = binding.predictionRecyclerView
 
+        binding.calendarViewSingle.setOnDateChangedListener(this)
+        binding.calendarViewSingle.setDateSelected(CalendarDay.today(),true)
+
         attachUI()
 
         loadData()
-
-        creatingWeekSelector()
-
-    }
-
-    private fun creatingWeekSelector() {
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            requireContext(), R.layout.simple_spinner_item, viewModel.getWeeksList()
-        )
-        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        binding.weekSpinner.adapter = arrayAdapter
-        binding.weekSpinner.setSelection(0)
-        binding.weekSpinner.onItemSelectedListener = this
-
     }
 
     private fun attachUI() {
@@ -96,19 +89,23 @@ class ListFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val awayTeam = adapter.predictions[position].awayTeam
         val homeTeam = adapter.predictions[position].homeTeam
 
-        navigator.navigateToDetail(id, awayTeam, homeTeam)
+        openDetailDialog(id,homeTeam,awayTeam)
+    }
+
+    private fun openDetailDialog(id: Long, homeName: String, awayName: String) {
+        DetailBottomSheetDialogFragment.newInstance(id,homeName,awayName)
+            .show(this.requireFragmentManager(), "DetailBottomSheetDialog")
+    }
+
+    override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
+        val format = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
+        val formatter = format.format(date.date.atStartOfDay())
+
+        viewModel.filterDay.onNext(formatter)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         bag.clear()
     }
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-        viewModel.filterWeek.onNext(position + 1)
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {
-    }
-
 }

@@ -11,26 +11,40 @@
 
     </data>
 
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendar_view_single"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:mcv_selectionMode="single"
+            app:mcv_selectionColor="@color/green"
+            app:mcv_calendarMode="week"
+            />
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:visibility="@{viewModel.isLoadingProgress() ? View.VISIBLE : View.GONE}"
             android:layout_width="match_parent"
-            android:indeterminateTint="@color/purple_500"
+            android:indeterminateTint="@color/green"
             android:layout_gravity="center_vertical"
             android:layout_height="150dp"/>
 
-        <Spinner
-            android:id="@+id/weekSpinner"
-            android:padding="12dp"
+        <TextView
+            android:id="@+id/errorTitle"
             android:layout_width="match_parent"
-            android:layout_height="80dp"/>
+            android:layout_height="wrap_content"
+            android:text="No events today"
+            android:visibility="@{viewModel.emptyViewVisible? View.VISIBLE : View.GONE}"
+            android:textAlignment="center"
+            android:layout_marginTop="36dp"
+            android:textColor="@color/black"
+            tools:text="No events today"
+            android:textSize="23sp"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/predictionRecyclerView"
@@ -38,10 +52,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             bind:hasFixedSize="@{true}"
+            android:visibility="@{viewModel.listViewVisible? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </LinearLayout>
 </layout>

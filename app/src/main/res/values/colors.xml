@@ -12,4 +12,5 @@
     <color name="grey">#006C6A6A</color>
 
     <color name="team_blue_light">#1D428A</color>
+    <color name="color_splash">#FFFFFFFF</color>
 </resources>

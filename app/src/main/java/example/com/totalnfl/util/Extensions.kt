@@ -29,7 +29,7 @@ fun imageResolverId(key: String) : Int {
     teamsMap["Los Angeles Rams"] = R.drawable.los_angeles_rams
     teamsMap["Chicago Bears"] = R.drawable.chicago_bears
     teamsMap["Carolina Panthers"] = R.drawable.carolina_panthers
-    teamsMap["Washington Football Team"] = R.drawable.washington_football_team
+    teamsMap["Washington Commanders"] = R.drawable.washington_football_team
     teamsMap["Philadelphia Eagles"] = R.drawable.philadelphia_eagles
     teamsMap["New England Patriots"] = R.drawable.new_england_patriots
     teamsMap["Denver Broncos"] = R.drawable.denver_broncos

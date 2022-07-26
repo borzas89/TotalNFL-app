@@ -9,14 +9,13 @@ import example.com.totalnfl.data.api.Adjustments
 import example.com.totalnfl.data.api.PredictedMatch
 import example.com.totalnfl.network.TotalNflService
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+class DetailBottomSheetViewModel @Inject constructor(
     private var totalNflService: TotalNflService,
 ) : BaseViewModel() {
 
@@ -29,6 +28,8 @@ class DetailViewModel @Inject constructor(
     val prediction = ObservableField<PredictedMatch>()
     val awayAdjustment = ObservableField<Adjustments>()
     val homeAdjustment = ObservableField<Adjustments>()
+
+    var title = ObservableField<String>()
 
     fun gettingDetailData(id: Long) {
         totalNflService.getPredictedMatchById(id.toString()).observeOn(AndroidSchedulers.mainThread())
@@ -44,7 +45,6 @@ class DetailViewModel @Inject constructor(
                     Log.d("TOTAL_NFL_API", it.message.toString())
                 }
             ).addTo(compositeDisposable)
-
     }
 
     fun gettingAwayAdjustmentsData(name: String) {
