@@ -8,10 +8,12 @@ import example.com.totalnfl.arch.BaseViewModel
 import example.com.totalnfl.data.api.Adjustments
 import example.com.totalnfl.data.api.PredictedMatch
 import example.com.totalnfl.network.TotalNflService
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CompletableDeferred
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,8 +30,6 @@ class DetailBottomSheetViewModel @Inject constructor(
     val prediction = ObservableField<PredictedMatch>()
     val awayAdjustment = ObservableField<Adjustments>()
     val homeAdjustment = ObservableField<Adjustments>()
-
-    var title = ObservableField<String>()
 
     fun gettingDetailData(id: Long) {
         totalNflService.getPredictedMatchById(id.toString()).observeOn(AndroidSchedulers.mainThread())

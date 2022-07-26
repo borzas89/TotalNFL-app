@@ -56,8 +56,6 @@ class WinProgressView : View {
         canvas.drawRoundRect(currentLeft, 0f, (currentLeft + rightToAdd).coerceAtMost(width.f),
                 dp(10), 100f, 100f, paint)
         currentLeft += rightToAdd
-
-
     }
 
 }

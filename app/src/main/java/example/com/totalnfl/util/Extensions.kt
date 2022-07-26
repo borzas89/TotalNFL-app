@@ -2,6 +2,8 @@ package example.com.totalnfl.util
 
 import android.view.View
 import example.com.totalnfl.R
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 fun imageResolverId(key: String) : Int {
     val teamsMap: MutableMap<String, Int> = HashMap()
@@ -47,4 +49,17 @@ fun imageResolverId(key: String) : Int {
 
 fun View.onClick(onClickListener: (View) -> Unit) {
     this.setOnClickListener(onClickListener)
+}
+
+fun rounding(value: Double): Int {
+    var bd = BigDecimal(value.toString())
+    bd = bd.setScale(0, RoundingMode.HALF_UP)
+    return bd.toInt()
+}
+
+fun round(value: Double, places: Int): Double {
+    require(places >= 0)
+    var bd = BigDecimal(value.toString())
+    bd = bd.setScale(places, RoundingMode.HALF_UP)
+    return bd.toDouble()
 }

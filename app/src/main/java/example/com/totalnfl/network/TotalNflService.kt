@@ -2,6 +2,7 @@ package example.com.totalnfl.network
 
 import example.com.totalnfl.data.api.Adjustments
 import example.com.totalnfl.data.api.PredictedMatch
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -34,7 +35,7 @@ interface TotalNflService {
     fun getAdjustmentsByTeamName(@Query("name") name: String): Single<Adjustments>
 
     @GET("prediction/day/{day}/")
-    fun getPredictedMatchesByDay(@Path("day") day: String): Single<List<PredictedMatch>>
+    fun getPredictedMatchesByDay(@Path("day") day: String): Observable<List<PredictedMatch>>
 
     companion object {
         private const val BASE_URL = "https://totalnfl-server.herokuapp.com/api/v2/"

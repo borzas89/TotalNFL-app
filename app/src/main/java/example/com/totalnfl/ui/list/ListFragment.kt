@@ -17,7 +17,6 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
 import example.com.totalnfl.databinding.FragmentListBinding
-import example.com.totalnfl.navigator.AppNavigator
 import example.com.totalnfl.ui.detail.DetailBottomSheetDialogFragment
 import example.com.totalnfl.util.disposedBy
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,8 +24,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
-import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class ListFragment : Fragment(), OnDateSelectedListener {

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TotalNFL</string>
+    <string name="event_title">%s  @  %s</string>
 </resources>

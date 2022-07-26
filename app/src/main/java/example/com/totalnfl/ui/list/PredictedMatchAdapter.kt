@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import example.com.totalnfl.R
 import example.com.totalnfl.data.api.PredictedMatch
 import example.com.totalnfl.databinding.ListItemBinding
 import example.com.totalnfl.util.imageResolverId
 import example.com.totalnfl.util.onClick
-import java.util.*
+import example.com.totalnfl.util.rounding
+import kotlin.math.round
 
 typealias ItemClickedlambda = (v: View, position: Int) -> Unit
 
@@ -49,16 +51,20 @@ class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda) :
         fun bind(item: PredictedMatch) {
             binding.imageAway.setImageResource(imageResolverId(item.awayTeam))
             binding.imageHome.setImageResource(imageResolverId(item.homeTeam))
-            binding.awayScore.text = item.awayScore.toString()
-            binding.homeScore.text = item.homeScore.toString()
-            binding.predictedMatchTitle.text = item.awayTeam + " @ " + item.homeTeam
-            binding.predictedScore.text = item.total.toString()
+
+            item.let {
+                binding.awayScore.text = rounding(item.awayScore!!).toString()
+                binding.homeScore.text = rounding(item.homeScore!!).toString()
+            }
+
+            binding.predictedMatchTitle.text =
+                binding.root.context.getString(R.string.event_title, item.awayTeam, item.homeTeam)
+
+            binding.predictedScore.text = rounding(item.total!!).toString()
 
             binding.winPercentage.winHomeFloat = item.homeWinPercentage!!.toFloat()
             binding.winPercentage.winAwayFloat = item.awayWinPercentage!!.toFloat()
-
         }
 
     }
-
 }
