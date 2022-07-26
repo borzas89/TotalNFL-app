@@ -1,36 +1,34 @@
 package example.com.totalnfl.data.api
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import java.lang.reflect.Constructor
+
+import com.google.gson.annotations.SerializedName
 import java.util.*
 
-@JsonClass(generateAdapter = true)
 data class PredictedMatch (
 
-    @Json(name = "id")
+    @SerializedName( "id")
     var id: Int = 0,
-    @Json(name = "homeTeam")
+    @SerializedName("homeTeam")
     var homeTeam: String = "",
-    @Json(name = "awayTeam")
+    @SerializedName( "awayTeam")
     var awayTeam: String = "",
-    @Json( name ="homeScore")
+    @SerializedName( "homeScore")
     var homeScore: Double? = 0.0,
-    @Json( name ="awayScore")
+    @SerializedName( "awayScore")
     var awayScore : Double? = 0.0,
-    @Json( name ="homeWinPercentage")
+    @SerializedName("homeWinPercentage")
     var homeWinPercentage: Double? = 0.0,
-    @Json( name ="awayWinPercentage")
+    @SerializedName( "awayWinPercentage")
     var awayWinPercentage: Double? = 0.0,
-    @Json( name = "total")
+    @SerializedName(  "total")
     var total: Double? = 0.0,
-    @Json( name = "margin")
+    @SerializedName(  "margin")
     var margin: Double? = 0.0,
-    @Json( name ="week")
+    @SerializedName( "week")
     var week: Int = 0,
-    @Json( name ="matchDate")
+    @SerializedName( "matchDate")
     var matchDate: Date = Date(),
-    @Json( name = "season")
+    @SerializedName( "season")
     var season: String = ""
 
 ): BaseApiModel {
