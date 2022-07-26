@@ -11,7 +11,7 @@ import io.reactivex.processors.BehaviorProcessor
 
 open class BaseViewModel  : ViewModel() {
 
-    private val compositeDisposable = CompositeDisposable()
+    protected val compositeDisposable = CompositeDisposable()
 
     private val loadingProcessor = BehaviorProcessor.create<Boolean>()
 

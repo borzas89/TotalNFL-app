@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TotalNFL" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
+<!--                <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>-->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@android:color/darker_gray</item>
         <item name="colorOnPrimary">@color/black</item>
@@ -12,5 +13,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.SplashScreenTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/color_splash</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/football_icon2</item>
+        <item name="windowSplashScreenAnimationDuration">5000</item>
+        <item name="postSplashScreenTheme">@style/Theme.TotalNFL</item>
     </style>
 </resources>
