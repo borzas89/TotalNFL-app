@@ -2,9 +2,10 @@ package example.com.totalnfl.data.api
 
 
 import com.google.gson.annotations.SerializedName
+import example.com.totalnfl.data.base.BaseApiModel
 import java.util.*
 
-data class PredictedMatch (
+data class PredictedMatchDto (
 
     @SerializedName( "id")
     var id: Int = 0,

@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import example.com.totalnfl.network.TotalNflService
+import example.com.totalnfl.network.TotalNflApi
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -13,6 +13,6 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideTotalNflService(): TotalNflService =
-        TotalNflService.create()
+    fun provideTotalNflService(): TotalNflApi =
+        TotalNflApi.create()
 }

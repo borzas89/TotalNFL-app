@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import example.com.totalnfl.R
-import example.com.totalnfl.data.api.PredictedMatch
+import example.com.totalnfl.data.api.PredictedMatchDto
+import example.com.totalnfl.data.model.PredictedMatch
 import example.com.totalnfl.databinding.ListItemBinding
 import example.com.totalnfl.util.imageResolverId
 import example.com.totalnfl.util.onClick
 import example.com.totalnfl.util.rounding
-import kotlin.math.round
 
 typealias ItemClickedlambda = (v: View, position: Int) -> Unit
 

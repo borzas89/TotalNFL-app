@@ -5,31 +5,29 @@ import androidx.databinding.ObservableField
 import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import example.com.totalnfl.arch.BaseViewModel
-import example.com.totalnfl.data.api.Adjustments
-import example.com.totalnfl.data.api.PredictedMatch
-import example.com.totalnfl.network.TotalNflService
-import io.reactivex.Completable
+import example.com.totalnfl.data.api.AdjustmentDto
+import example.com.totalnfl.data.api.PredictedMatchDto
+import example.com.totalnfl.network.TotalNflApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.CompletableDeferred
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailBottomSheetViewModel @Inject constructor(
-    private var totalNflService: TotalNflService,
+    private var totalNflService: TotalNflApi,
 ) : BaseViewModel() {
 
-    val predictedMatch: BehaviorRelay<PredictedMatch> = BehaviorRelay.createDefault(
-        PredictedMatch())
-    val awayAdjustments: BehaviorRelay<Adjustments> = BehaviorRelay.createDefault(
-        Adjustments())
-    val homeAdjustments: BehaviorRelay<Adjustments> = BehaviorRelay.createDefault(
-        Adjustments())
-    val prediction = ObservableField<PredictedMatch>()
-    val awayAdjustment = ObservableField<Adjustments>()
-    val homeAdjustment = ObservableField<Adjustments>()
+    val predictedMatch: BehaviorRelay<PredictedMatchDto> = BehaviorRelay.createDefault(
+        PredictedMatchDto())
+    val awayAdjustments: BehaviorRelay<AdjustmentDto> = BehaviorRelay.createDefault(
+        AdjustmentDto())
+    val homeAdjustments: BehaviorRelay<AdjustmentDto> = BehaviorRelay.createDefault(
+        AdjustmentDto())
+    val prediction = ObservableField<PredictedMatchDto>()
+    val awayAdjustment = ObservableField<AdjustmentDto>()
+    val homeAdjustment = ObservableField<AdjustmentDto>()
 
     fun gettingDetailData(id: Long) {
         totalNflService.getPredictedMatchById(id.toString()).observeOn(AndroidSchedulers.mainThread())
@@ -65,7 +63,8 @@ class DetailBottomSheetViewModel @Inject constructor(
     }
 
     fun gettingHomeAdjustmentsData(name: String) {
-        totalNflService.getAdjustmentsByTeamName(name).observeOn(AndroidSchedulers.mainThread())
+        totalNflService.getAdjustmentsByTeamName(name)
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .compose(applySingleTransformers())
             .subscribeBy(

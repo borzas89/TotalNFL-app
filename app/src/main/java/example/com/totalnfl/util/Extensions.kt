@@ -2,8 +2,12 @@ package example.com.totalnfl.util
 
 import android.view.View
 import example.com.totalnfl.R
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.*
+import kotlin.collections.HashMap
 
 fun imageResolverId(key: String) : Int {
     val teamsMap: MutableMap<String, Int> = HashMap()
@@ -62,4 +66,8 @@ fun round(value: Double, places: Int): Double {
     var bd = BigDecimal(value.toString())
     bd = bd.setScale(places, RoundingMode.HALF_UP)
     return bd.toDouble()
+}
+fun formattedToday(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
+    return formatter.format(LocalDate.now().atStartOfDay())
 }
