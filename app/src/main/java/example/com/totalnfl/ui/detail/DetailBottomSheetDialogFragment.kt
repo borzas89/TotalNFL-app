@@ -1,7 +1,6 @@
 package example.com.totalnfl.ui.detail
 
 import android.app.Dialog
-import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,16 +28,10 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private lateinit var dialog: BottomSheetDialog
     private val bag = CompositeDisposable()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, example.com.totalnfl.R.style.AppBottomSheetDialogTheme)
-
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -87,7 +80,6 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 viewModel.homeAdjustment.set(adjustment)
             }
             .disposedBy(bag)
-
     }
 
 
@@ -103,7 +95,7 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
             val bottomSheet =
                 dialog.findViewById<View>(example.com.totalnfl.R.id.design_bottom_sheet) as FrameLayout?
 
-            BottomSheetBehavior.from(bottomSheet!!).setState(BottomSheetBehavior.STATE_EXPANDED)
+            BottomSheetBehavior.from(bottomSheet!!).state = BottomSheetBehavior.STATE_EXPANDED
 
             val bottomSheetInternal = bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             BottomSheetBehavior.from(bottomSheetInternal).peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels

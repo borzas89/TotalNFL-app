@@ -30,7 +30,8 @@ class DetailViewModel @Inject constructor(
     val homeAdjustment = ObservableField<AdjustmentDto>()
 
     fun gettingDetailData(id: Long) {
-        totalNflService.getPredictedMatchById(id.toString()).observeOn(AndroidSchedulers.mainThread())
+        totalNflService.getPredictedMatchById(id.toString())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .compose(applySingleTransformers())
             .subscribeBy(

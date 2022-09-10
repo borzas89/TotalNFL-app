@@ -37,7 +37,6 @@ class WinProgressView : View {
         }
 
     @SuppressLint("ResourceAsColor")
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 

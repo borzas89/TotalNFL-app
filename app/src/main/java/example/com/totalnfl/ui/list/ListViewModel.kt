@@ -21,30 +21,36 @@ class ListViewModel @Inject constructor(
     private val predictionService: PredictionService
 ) : BaseViewModel() {
     val predictions = BehaviorRelay.createDefault(listOf<PredictedMatch>())
+    val errorTitle = ObservableField("No events today")
     val filterDay: BehaviorSubject<String> = BehaviorSubject.createDefault(
         formattedToday()
     )
-    val errorTitle = ObservableField("No events today")
 
     init {
-        filterDay.subscribe { filteredDay ->
-            predictionService
-                .gettingMatchesByDay(filteredDay)
-                .compose(applySingleTransformers())
-                .subscribeBy(
-                    onSuccess = { result ->
-                        when (result) {
-                            result -> predictions.accept(result.sortedBy { predictedMatch ->
-                                predictedMatch.matchDate
-                            })
-                        }
-                        refreshStates()
-                    }, onError = {
-                        Timber.d("Error: ${it.message.toString()}")
-                        errorTitle.set("Something went wrong, try again later...")
-                    },
-                )
+        filterDay.subscribe {
+            gettingMatchesByDay()
         }.addTo(compositeDisposable)
+    }
+
+    fun gettingMatchesByDay(){
+        errorTitle.set("")
+        predictionService
+            .gettingMatchesByDay(filterDay.value!!)
+            .compose(applySingleTransformers())
+            .subscribeBy(
+                onSuccess = { result ->
+                    errorTitle.set("")
+                    when (result) {
+                        result -> predictions.accept(result.sortedBy { predictedMatch ->
+                            predictedMatch.matchDate
+                        })
+                    }
+                    refreshStates()
+                }, onError = {
+                    Timber.d("Error: ${it.message.toString()}")
+                    errorTitle.set("Something went wrong, try again later...")
+                },
+            )
     }
 
     private fun refreshStates() {
@@ -61,8 +67,8 @@ class ListViewModel @Inject constructor(
     }
 
     fun filterToday(){
-        val format1 = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
-        val formatter = format1.format(LocalDate.now().atStartOfDay())
+        val format = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
+        val formatter = format.format(LocalDate.now().atStartOfDay())
         filterDay.onNext(formatter)
     }
 
