@@ -2,6 +2,8 @@
 
 Anroid application for my TotalNFL server app, app displays predictions for NFL games.
 
+https://totalnfl-server.herokuapp.com/api/v2/predicted-reg-matches/
+
 Used technologies:
 - Kotlin
 - Dagger-Hilt
