@@ -5,6 +5,7 @@ import java.util.*
 
 data class PredictedMatch(
     var id: Int = 0,
+    var commonMatchId: String = "",
     var homeTeam: String = "",
     var awayTeam: String = "",
     var homeScore: Double? = 0.0,

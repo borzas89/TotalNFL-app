@@ -7,8 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -89,12 +87,13 @@ class ListFragment : Fragment(), OnDateSelectedListener {
         val id = adapter.predictions[position].id.toLong()
         val awayTeam = adapter.predictions[position].awayTeam
         val homeTeam = adapter.predictions[position].homeTeam
+        val commonMatchId = adapter.predictions[position].commonMatchId
 
-        openDetailDialog(id,homeTeam,awayTeam)
+        openDetailDialog(id,homeTeam,awayTeam,commonMatchId)
     }
 
-    private fun openDetailDialog(id: Long, homeName: String, awayName: String) {
-        DetailBottomSheetDialogFragment.newInstance(id,homeName,awayName)
+    private fun openDetailDialog(id: Long, homeName: String, awayName: String, commonMatchId: String) {
+        DetailBottomSheetDialogFragment.newInstance(id,homeName,awayName, commonMatchId)
             .show(this.requireFragmentManager(), "DetailBottomSheetDialog")
     }
 

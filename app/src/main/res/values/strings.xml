@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">TotalNFL</string>
     <string name="event_title">%s  @  %s</string>
+    <string name="formatPercent">%s%%</string>
 </resources>

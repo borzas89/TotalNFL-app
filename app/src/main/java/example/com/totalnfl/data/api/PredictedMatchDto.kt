@@ -1,6 +1,5 @@
 package example.com.totalnfl.data.api
 
-
 import com.google.gson.annotations.SerializedName
 import example.com.totalnfl.data.base.BaseApiModel
 import java.util.*
@@ -9,6 +8,8 @@ data class PredictedMatchDto (
 
     @SerializedName( "id")
     var id: Int = 0,
+    @SerializedName("commonMatchId")
+    var commonMatchId: String = "",
     @SerializedName("homeTeam")
     var homeTeam: String = "",
     @SerializedName( "awayTeam")

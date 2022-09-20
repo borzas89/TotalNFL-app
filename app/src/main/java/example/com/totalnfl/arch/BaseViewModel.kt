@@ -4,7 +4,6 @@ import androidx.annotation.CallSuper
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import example.com.totalnfl.util.wrap
-import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.SingleTransformer
 import io.reactivex.disposables.CompositeDisposable

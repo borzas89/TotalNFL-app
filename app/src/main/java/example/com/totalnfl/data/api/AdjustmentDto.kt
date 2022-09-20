@@ -3,7 +3,6 @@ package example.com.totalnfl.data.api
 import com.google.gson.annotations.SerializedName
 import example.com.totalnfl.data.base.BaseApiModel
 
-
 data class AdjustmentDto(
     @SerializedName( "id") val id: Int = 0,
     @SerializedName( "team") val team: String = "",

@@ -10,6 +10,7 @@ class PredictedMatchApiToModelMapper @Inject constructor() :
 
     override fun map(model: PredictedMatchDto) = PredictedMatch(
         id = model.id,
+        commonMatchId = model.commonMatchId,
         awayTeam = model.awayTeam,
         homeTeam = model.homeTeam,
         awayScore = model.awayScore,

@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import example.com.totalnfl.data.remote.AdjustmentService
 import example.com.totalnfl.data.remote.AdjustmentServiceImpl
+import example.com.totalnfl.data.remote.MarketService
+import example.com.totalnfl.data.remote.MarketServiceImpl
 import example.com.totalnfl.data.remote.PredictionService
 import example.com.totalnfl.data.remote.PredictionServiceImpl
 
@@ -18,4 +20,7 @@ interface DataModule  {
 
     @Binds
     fun bindAdjustmentService(impl: AdjustmentServiceImpl): AdjustmentService
+
+    @Binds
+    fun bindMarketService(impl: MarketServiceImpl): MarketService
 }

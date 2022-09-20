@@ -39,10 +39,12 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val predictionId = requireArguments().getLong("id")
         val awayTeam = requireArguments().getString("awayName")
         val homeTeam = requireArguments().getString("homeName")
+        val commonMatchId = requireArguments().getString("commonMatchId")
 
         viewModel.gettingDetailData(predictionId)
         viewModel.gettingAwayAdjustmentsData(awayTeam!!)
         viewModel.gettingHomeAdjustmentsData(homeTeam!!)
+        viewModel.gettingMarketData(commonMatchId!!)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -80,6 +82,14 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 viewModel.homeAdjustment.set(adjustment)
             }
             .disposedBy(bag)
+
+        viewModel.marketDatas.observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { marketData ->
+                viewModel.marketData.set(marketData)
+            }
+            .disposedBy(bag)
+
     }
 
 
@@ -109,13 +119,15 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
         fun newInstance(
             Id: Long,
             homeTeamName: String,
-            awayTeamName: String
+            awayTeamName: String,
+            commonMatchId: String
         ): DetailBottomSheetDialogFragment {
             return DetailBottomSheetDialogFragment().apply {
                 arguments = Bundle().also { bundle ->
                     bundle.putLong("id", Id)
                     bundle.putString("homeName", homeTeamName)
                     bundle.putString("awayName", awayTeamName)
+                    bundle.putString("commonMatchId", commonMatchId)
                 }
             }
         }
