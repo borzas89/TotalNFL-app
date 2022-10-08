@@ -13,7 +13,6 @@ import example.com.totalnfl.util.onClick
 import example.com.totalnfl.util.rounding
 
 typealias ItemClickedlambda = (v: View, position: Int) -> Unit
-
 class PredictedMatchAdapter(var onItemClicked: ItemClickedlambda) :
     RecyclerView.Adapter<PredictedMatchAdapter.ViewHolder>() {
 

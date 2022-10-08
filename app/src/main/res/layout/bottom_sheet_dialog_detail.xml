@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="example.com.totalnfl.ui.detail.DetailBottomSheetViewModel" />
+
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="12dp"
-        android:padding="26dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:background="@drawable/rounded_rectangle"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="26dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
         <ProgressBar
@@ -27,8 +29,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center_vertical"
             android:indeterminateTint="@color/green"
-            app:isVisibleOrGone="@{viewModel.isLoadingProgress()}"
-            />
+            app:isVisibleOrGone="@{viewModel.isLoadingProgress()}" />
 
         <LinearLayout
             android:id="@+id/titleLayout"
@@ -41,12 +42,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="@{viewModel.matchTitle}"
+                android:text="@{viewModel.prediction.matchTitle}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                tools:text="Dallas Cowboys vs Tampa Bay Buccaneers"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="Dallas Cowboys vs Tampa Bay Buccaneers" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="@{viewModel.prediction.awayScore.toString()}"
+                app:doubleFormat="@{viewModel.prediction.awayScore}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
@@ -85,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:text="@{viewModel.prediction.homeScore.toString()}"
+                app:doubleFormat="@{viewModel.prediction.homeScore}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
@@ -107,11 +108,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                app:percentFormat="@{viewModel.prediction.awayWinPercentage}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:percentFormat="@{viewModel.prediction.awayWinPercentage}"
                 tools:text="78" />
 
             <TextView
@@ -131,11 +132,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                app:percentFormat="@{viewModel.prediction.homeWinPercentage}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:percentFormat="@{viewModel.prediction.homeWinPercentage}"
                 tools:text="22" />
 
         </LinearLayout>
@@ -145,7 +146,7 @@
             android:id="@+id/tvTotals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.prediction.total.toString()}"
+            app:doubleFormat="@{viewModel.prediction.total}"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="19sp"
@@ -157,7 +158,7 @@
             android:id="@+id/tvMargin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.prediction.margin.toString()}"
+            app:doubleFormat="@{viewModel.prediction.margin}"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="19sp"
@@ -176,11 +177,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.awayAdjustment.pointsFor}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.awayAdjustment.pointsFor}"
                 tools:text="21.2" />
 
             <TextView
@@ -200,11 +201,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.homeAdjustment.pointsFor}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.homeAdjustment.pointsFor}"
                 tools:text="31.2" />
         </LinearLayout>
 
@@ -221,11 +222,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.awayAdjustment.pointsAllowed}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.awayAdjustment.pointsAllowed}"
                 tools:text="11.2" />
 
             <TextView
@@ -245,21 +246,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.homeAdjustment.pointsAllowed}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.homeAdjustment.pointsAllowed}"
                 tools:text="21.5" />
         </LinearLayout>
 
         <View
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp"
             android:id="@+id/divider"
             android:layout_width="fill_parent"
             android:layout_height="4dp"
-            android:background="#8A504E4E"/>
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:background="#8A504E4E" />
 
         <LinearLayout
             android:id="@+id/marketSpreadLayout"
@@ -273,11 +274,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.marketData.marketAwaySpread}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.market.marketAwaySpread}"
                 tools:text="-5.0" />
 
             <TextView
@@ -297,55 +298,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:doubleFormat="@{viewModel.marketData.marketHomeSpread}"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:doubleFormat="@{viewModel.market.marketHomeSpread}"
                 tools:text="5.0" />
         </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/marketLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-
-        <TextView
-            android:id="@+id/tvMarketInfo"
+        <LinearLayout
+            android:id="@+id/marketLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Market line is:"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            tools:text="Market line is:" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvMarketData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:doubleFormat="@{viewModel.marketData.marketTotal}"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            tools:text="51.2" />
+            <TextView
+                android:id="@+id/tvMarketInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Market line is:"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                tools:text="Market line is:" />
 
-        <TextView
-            android:id="@+id/tvMarketSuggestion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.suggestion}"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            tools:text="Suggestion is: take under" />
+            <TextView
+                android:id="@+id/tvMarketData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                app:doubleFormat="@{viewModel.market.marketTotal}"
+                tools:text="51.2" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvMarketSuggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.suggestion}"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                tools:text="Suggestion is: take under" />
+
+        </LinearLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

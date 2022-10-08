@@ -7,12 +7,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
@@ -20,10 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import example.com.totalnfl.R
 import example.com.totalnfl.databinding.FragmentListBinding
 import example.com.totalnfl.ui.detail.DetailBottomSheetDialogFragment
-import example.com.totalnfl.util.disposedBy
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.*
 
@@ -33,10 +27,8 @@ class ListFragment : Fragment(), OnDateSelectedListener {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ListViewModel by viewModels()
-    private val bag = CompositeDisposable()
 
     lateinit var adapter: PredictedMatchAdapter
-    lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,70 +36,55 @@ class ListFragment : Fragment(), OnDateSelectedListener {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
+        binding.apply {
+            viewModel = this@ListFragment.viewModel
+            lifecycleOwner = this@ListFragment
+        }
+        binding.adapter = PredictionAdapter(listOf(), viewModel)
         return binding.root
-    }
-
-    private fun loadData() {
-        viewModel.predictions.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { list -> adapter.updateData(list) }
-            .disposedBy(bag)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = binding.predictionRecyclerView
-
         binding.calendarViewSingle.setOnDateChangedListener(this)
-        binding.calendarViewSingle.setDateSelected(CalendarDay.today(),true)
+        binding.calendarViewSingle.setDateSelected(CalendarDay.today(), true)
 
-        attachUI()
-
-        loadData()
+        viewModel.showDetail.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { prediction ->
+                val id = prediction.id.toLong()
+                val awayTeam = prediction.awayTeam
+                val homeTeam = prediction.homeTeam
+                val commonMatchId = prediction.commonMatchId
+                openDetailDialog(id, homeTeam, awayTeam, commonMatchId)
+            }
+        }
     }
 
-    private fun attachUI() {
-        val linearLayoutManager = LinearLayoutManager(context)
-        val dividerItemDecoration = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.addItemDecoration(dividerItemDecoration)
-
-        initializeListView()
-    }
-
-    private fun initializeListView() {
-        adapter = PredictedMatchAdapter() { view, position -> rowTapped(position) }
-        recyclerView.adapter = adapter
-    }
-
-    private fun rowTapped(position: Int) {
-        val id = adapter.predictions[position].id.toLong()
-        val awayTeam = adapter.predictions[position].awayTeam
-        val homeTeam = adapter.predictions[position].homeTeam
-        val commonMatchId = adapter.predictions[position].commonMatchId
-
-        openDetailDialog(id,homeTeam,awayTeam,commonMatchId)
-    }
-
-    private fun openDetailDialog(id: Long, homeName: String, awayName: String, commonMatchId: String) {
-        DetailBottomSheetDialogFragment.newInstance(id,homeName,awayName, commonMatchId)
+    private fun openDetailDialog(
+        id: Long,
+        homeName: String,
+        awayName: String,
+        commonMatchId: String
+    ) {
+        DetailBottomSheetDialogFragment.newInstance(id, homeName, awayName, commonMatchId)
             .show(this.requireFragmentManager(), "DetailBottomSheetDialog")
     }
 
-    override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
+    override fun onDateSelected(
+        widget: MaterialCalendarView,
+        date: CalendarDay,
+        selected: Boolean
+    ) {
         val format = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
         val formatter = format.format(date.date.atStartOfDay())
 
         viewModel.filterDay.onNext(formatter)
     }
 
-    private fun setCalendarToday(){
+    private fun setCalendarToday() {
         binding.calendarViewSingle.selectedDate = CalendarDay.today()
         binding.calendarViewSingle.currentDate = CalendarDay.today()
-        binding.calendarViewSingle.setDateSelected(CalendarDay.today(),true)
+        binding.calendarViewSingle.setDateSelected(CalendarDay.today(), true)
         viewModel.filterToday()
     }
 
@@ -129,10 +106,5 @@ class ListFragment : Fragment(), OnDateSelectedListener {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        bag.clear()
     }
 }

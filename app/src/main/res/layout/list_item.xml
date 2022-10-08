@@ -1,143 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-    </data>
-<FrameLayout
-    android:layout_width="match_parent"
-    android:id="@+id/list_frame_item"
-    android:layout_margin="14dp"
-    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/titleLayout"
+        <variable
+            name="prediction"
+            type="example.com.totalnfl.data.model.PredictedMatch" />
+
+        <variable
+            name="listener"
+            type="example.com.totalnfl.ui.list.PredictionListener" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/list_frame_item"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="14dp"
+        android:onClick="@{() -> listener.onPredictionClicked(prediction)}">
 
         <LinearLayout
+            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/predictedMatchTitle"
-                android:padding="4dp"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                tools:text="Tampa Bay Buccaneers vs. Dallas Cowboys" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-           <LinearLayout
-            android:id="@+id/logosLayout"
-            android:weightSum="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/predictedMatchTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{prediction.matchTitle}"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="Tampa Bay Buccaneers vs. Dallas Cowboys" />
 
-               <ImageView
-                   android:id="@+id/imageAway"
-                   android:layout_width="104dp"
-                   android:layout_height="88dp"
-                   android:layout_weight="1"
-                   android:scaleType="fitCenter"
-                   android:src="@drawable/tampa_bay_buccaneers"
-                   android:transitionName="image" />
+                <LinearLayout
+                    android:id="@+id/logosLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
 
-
-
-               <LinearLayout
-                   android:id="@+id/infoLayout"
-                   android:layout_weight="1"
-                   android:orientation="vertical"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content">
-
-                   <TextView
-                       android:id="@+id/predictedScore"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_gravity="center"
-                       android:layout_margin="12dp"
-                       android:layout_marginLeft="12dp"
-                       android:textAlignment="center"
-                       android:textColor="@color/black"
-                       android:textSize="19sp"
-                       android:textStyle="bold"
-                       tools:text="46.5" />
-
-               </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imageAway"
+                        android:layout_width="104dp"
+                        android:layout_height="88dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/tampa_bay_buccaneers"
+                        android:transitionName="image"
+                        app:setImage="@{prediction.awayTeam}" />
 
 
-               <ImageView
-                   android:id="@+id/imageHome"
-                   android:layout_width="118dp"
-                   android:layout_height="94dp"
-                   android:layout_marginStart="16dp"
-                   android:layout_weight="1"
-                   android:scaleType="fitCenter"
-                   android:src="@drawable/dallas_cowboys" />
+                    <LinearLayout
+                        android:id="@+id/infoLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/predictedScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="19sp"
+                            android:textStyle="bold"
+                            app:roundFormat="@{prediction.total}"
+                            tools:text="46.5" />
+
+                    </LinearLayout>
 
 
-           </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imageHome"
+                        android:layout_width="118dp"
+                        android:layout_height="94dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/dallas_cowboys"
+                        app:setImage="@{prediction.homeTeam}" />
+                </LinearLayout>
 
 
+            </LinearLayout>
 
-    </LinearLayout>
-
-        <RelativeLayout
-            android:layout_weight="2"
-            android:id="@+id/titleLayoutBottom1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:id="@+id/awayScore"
+            <RelativeLayout
+                android:id="@+id/titleLayoutBottom1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:layout_marginLeft="60dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="41.6" />
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="horizontal">
 
 
-            <TextView
-                android:id="@+id/homeScore"
+                <TextView
+                    android:id="@+id/awayScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="60dp"
+                    android:gravity="start"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:roundFormat="@{prediction.awayScore}"
+                    tools:text="41.6" />
+
+
+                <TextView
+                    android:id="@+id/homeScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="60dp"
+                    android:gravity="end"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:roundFormat="@{prediction.homeScore}"
+                    tools:text="13.6" />
+            </RelativeLayout>
+
+
+            <example.com.totalnfl.ui.view.WinProgressView
+                android:id="@+id/winPercentage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="60dp"
-                android:gravity="end"
-                android:textAlignment="textEnd"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="13.6" />
-        </RelativeLayout>
-
-
-        <example.com.totalnfl.ui.view.WinProgressView
-            android:id="@+id/winPercentage"
-            android:layout_width="match_parent"
-            android:background="@color/team_blue_light"
-            android:layout_height="10dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            />
-
-    </LinearLayout>
-
-
-
-</FrameLayout>
+                android:layout_height="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/team_blue_light"
+                app:setAwayProbability="@{prediction.awayWinPercentage}"
+                app:setHomeProbability="@{prediction.homeWinPercentage}" />
+        </LinearLayout>
+    </FrameLayout>
 </layout>
 

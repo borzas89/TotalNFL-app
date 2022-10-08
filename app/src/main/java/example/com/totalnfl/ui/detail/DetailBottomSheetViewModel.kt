@@ -2,7 +2,8 @@ package example.com.totalnfl.ui.detail
 
 import android.util.Log
 import androidx.databinding.ObservableField
-import com.jakewharton.rxrelay2.BehaviorRelay
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import example.com.totalnfl.arch.BaseViewModel
 import example.com.totalnfl.data.model.Adjustment
@@ -15,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,46 +25,48 @@ class DetailBottomSheetViewModel @Inject constructor(
     private var adjustmentService: AdjustmentService,
     private var marketService: MarketService
 ) : BaseViewModel() {
+    private val _predictedMatch = MutableLiveData<PredictedMatch>()
+    val prediction: LiveData<PredictedMatch> = _predictedMatch
 
-    val predictedMatch: BehaviorRelay<PredictedMatch> = BehaviorRelay.createDefault(
-        PredictedMatch()
-    )
-    val awayAdjustments: BehaviorRelay<Adjustment> = BehaviorRelay.createDefault(
-        Adjustment()
-    )
-    val homeAdjustments: BehaviorRelay<Adjustment> = BehaviorRelay.createDefault(
-        Adjustment()
-    )
-    val prediction = ObservableField<PredictedMatch>()
-    val awayAdjustment = ObservableField<Adjustment>()
-    val homeAdjustment = ObservableField<Adjustment>()
+    private val _awayAdjustment = MutableLiveData<Adjustment>()
+    val awayAdjustment: LiveData<Adjustment> = _awayAdjustment
 
-    val marketDatas: BehaviorRelay<Market> = BehaviorRelay.createDefault(
-        Market()
-    )
-    val marketData = ObservableField<Market>()
+    private val _homeAdjustment = MutableLiveData<Adjustment>()
+    val homeAdjustment: LiveData<Adjustment> = _homeAdjustment
+
+    private val _marketData = MutableLiveData<Market>()
+    val market: LiveData<Market> = _marketData
+
+    val filterId: BehaviorSubject<Long> = BehaviorSubject.createDefault(0L)
 
     val suggestion = ObservableField<String>()
-    val matchTitle = ObservableField<String>()
 
-    fun gettingDetailData(id: Long) {
-        predictionService.getPredictedMatchById(id.toString())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .compose(applySingleTransformers())
-            .subscribeBy(
-                onSuccess = { result ->
-                    when (result) {
-                        result -> predictedMatch.accept(result)
+    init {
+        filterId.subscribe {
+            gettingDetailData()
+        }.addTo(compositeDisposable)
+    }
 
+    fun gettingDetailData() {
+        filterId.value?.let { id ->
+            predictionService
+                .getPredictedMatchById(id.toString())
+                .compose(applySingleTransformers())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { result ->
+                        _predictedMatch.value = result
+                        prediction.value?.let {
+                            gettingMarketData(it.commonMatchId)
+                        }
+                        calculateSuggestion()
+                    }, onError = {
+                        Log.d("TOTAL_NFL_API_DETAIL", it.message.toString())
                     }
-                    matchTitle.set(predictedMatch.value.awayTeam + " @ " + predictedMatch.value.homeTeam)
-                    gettingMarketData(predictedMatch.value.commonMatchId)
-                    calculateSuggestion()
-                }, onError = {
-                    Log.d("TOTAL_NFL_API", it.message.toString())
-                }
-            ).addTo(compositeDisposable)
+                ).addTo(compositeDisposable)
+        }
+
     }
 
     fun gettingAwayAdjustmentsData(name: String) {
@@ -73,8 +77,7 @@ class DetailBottomSheetViewModel @Inject constructor(
             .subscribeBy(
                 onSuccess = { result ->
                     when (result) {
-                        result -> awayAdjustments.accept(result)
-
+                        result -> _awayAdjustment.value = result
                     }
                 }, onError = {
                     Log.d("TOTAL_NFL_API", it.message.toString())
@@ -91,8 +94,7 @@ class DetailBottomSheetViewModel @Inject constructor(
             .subscribeBy(
                 onSuccess = { result ->
                     when (result) {
-                        result -> homeAdjustments.accept(result)
-
+                        result -> _homeAdjustment.value = result
                     }
                 }, onError = {
                     Log.d("TOTAL_NFL_API", it.message.toString())
@@ -108,24 +110,23 @@ class DetailBottomSheetViewModel @Inject constructor(
             .subscribeBy(
                 onSuccess = { result ->
                     when (result) {
-                        result -> marketData.set(result)
-
+                        result -> _marketData.value = result
                     }
                     calculateSuggestion()
                 }, onError = {
-                    Log.d("TOTAL_NFL_API", it.message.toString())
+                    Log.d("TOTAL_NFL_API_MARKET", it.message.toString())
                 }
             ).addTo(compositeDisposable)
     }
 
     private fun calculateSuggestion() {
-        val predictedTotal = predictedMatch.value?.total
-        val marketTotal = marketData.get()?.marketTotal
-
-        if (predictedTotal!! > marketTotal!!) {
-            suggestion.set("Suggestion is: take OVER")
-        } else {
-            suggestion.set("Suggestion is: take UNDER")
+        val predictedTotal = prediction.value?.total
+        market.value?.let {
+            if (predictedTotal!! > it.marketTotal) {
+                suggestion.set("Suggestion is: take OVER")
+            } else {
+                suggestion.set("Suggestion is: take UNDER")
+            }
         }
     }
 
@@ -133,5 +134,4 @@ class DetailBottomSheetViewModel @Inject constructor(
         super.onCleared()
         compositeDisposable.clear()
     }
-
 }

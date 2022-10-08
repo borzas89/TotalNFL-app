@@ -1,14 +1,18 @@
 package example.com.totalnfl.ui.list
 
 import androidx.databinding.ObservableField
-import com.jakewharton.rxrelay2.BehaviorRelay
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import example.com.totalnfl.arch.BaseViewModel
 import example.com.totalnfl.data.model.PredictedMatch
 import example.com.totalnfl.data.remote.PredictionService
+import example.com.totalnfl.arch.Event
 import example.com.totalnfl.util.formattedToday
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -19,12 +23,16 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     private val predictionService: PredictionService
-) : BaseViewModel() {
-    val predictions = BehaviorRelay.createDefault(listOf<PredictedMatch>())
+) : BaseViewModel(), PredictionListener {
+    private val _predictionList = MutableLiveData<List<PredictedMatch>>()
+    val predictionList: LiveData<List<PredictedMatch>> = _predictionList
+
     val errorTitle = ObservableField("No events today")
     val filterDay: BehaviorSubject<String> = BehaviorSubject.createDefault(
         formattedToday()
     )
+
+    val showDetail = MutableLiveData<Event<PredictedMatch>>()
 
     init {
         filterDay.subscribe {
@@ -32,30 +40,31 @@ class ListViewModel @Inject constructor(
         }.addTo(compositeDisposable)
     }
 
-    fun gettingMatchesByDay(){
+    private fun gettingMatchesByDay() {
         errorTitle.set("")
-        predictionService
-            .gettingMatchesByDay(filterDay.value!!)
-            .compose(applySingleTransformers())
-            .subscribeBy(
-                onSuccess = { result ->
-                    errorTitle.set("")
-                    when (result) {
-                        result -> predictions.accept(result.sortedBy { predictedMatch ->
-                            predictedMatch.matchDate
-                        })
+        filterDay.value?.let { filteredDay ->
+            predictionService
+                .gettingMatchesByDay(filteredDay)
+                .compose(applySingleTransformers())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { result ->
+                        _predictionList.value = result
+                        refreshStates()
+                    },
+                    onError = {
+                        Timber.d("Error: ${it.message.toString()}")
+                        errorTitle.set("Something went wrong, try again later...")
                     }
-                    refreshStates()
-                }, onError = {
-                    Timber.d("Error: ${it.message.toString()}")
-                    errorTitle.set("Something went wrong, try again later...")
-                },
-            )
+                )
+                .addTo(compositeDisposable)
+        }
     }
 
     private fun refreshStates() {
-        predictions.subscribe {
-            if (it.isEmpty()) {
+        predictionList.value?.let { list ->
+            if (list.isEmpty()) {
                 listViewVisible.set(false)
                 emptyViewVisible.set(true)
                 errorTitle.set("No events today")
@@ -63,10 +72,10 @@ class ListViewModel @Inject constructor(
                 listViewVisible.set(true)
                 emptyViewVisible.set(false)
             }
-        }.addTo(compositeDisposable)
+        }
     }
 
-    fun filterToday(){
+    fun filterToday() {
         val format = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
         val formatter = format.format(LocalDate.now().atStartOfDay())
         filterDay.onNext(formatter)
@@ -75,5 +84,9 @@ class ListViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
+    }
+
+    override fun onPredictionClicked(prediction: PredictedMatch) {
+        showDetail.value = Event(prediction)
     }
 }

@@ -4,7 +4,6 @@ import example.com.totalnfl.data.api.AdjustmentDto
 import example.com.totalnfl.data.api.MarketDto
 import example.com.totalnfl.data.api.PredictedMatchDto
 import io.reactivex.Single
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,7 +26,10 @@ interface TotalNflApi {
     fun getPredictedRegMatchesByWeek(@Path("week") week: String): Single<List<PredictedMatchDto>>
 
     @GET("predicted-matches/type/{type}/week/{week}/")
-    fun getPredictedMatchesByWeek(@Path("type") type: String,@Path("week") week: String): Single<List<PredictedMatchDto>>
+    fun getPredictedMatchesByWeek(
+        @Path("type") type: String,
+        @Path("week") week: String
+    ): Single<List<PredictedMatchDto>>
 
     @GET("predicted-reg-matches/{id}/")
     fun getPredictedMatchById(@Path("id") id: String): Single<PredictedMatchDto>

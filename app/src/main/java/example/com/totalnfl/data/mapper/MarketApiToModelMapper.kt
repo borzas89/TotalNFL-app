@@ -10,6 +10,7 @@ class MarketApiToModelMapper @Inject constructor() :
 
     override fun map(model: MarketDto) =
         Market(
+            id = model.id,
             commonMatchId = model.commonMatchId,
             week = model.week,
             awayName = model.awayTeam,

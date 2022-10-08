@@ -14,10 +14,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import example.com.totalnfl.databinding.BottomSheetDialogDetailBinding
-import example.com.totalnfl.util.disposedBy
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
 @AndroidEntryPoint
 class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
@@ -26,7 +22,6 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private val viewModel: DetailBottomSheetViewModel by viewModels()
     private lateinit var dialog: BottomSheetDialog
-    private val bag = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,57 +36,27 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val homeTeam = requireArguments().getString("homeName")
         val commonMatchId = requireArguments().getString("commonMatchId")
 
-        viewModel.gettingDetailData(predictionId)
+        viewModel.filterId.onNext(predictionId)
         viewModel.gettingAwayAdjustmentsData(awayTeam!!)
         viewModel.gettingHomeAdjustmentsData(homeTeam!!)
-        viewModel.gettingMarketData(commonMatchId!!)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = BottomSheetDialogDetailBinding.inflate(inflater, container, false)
 
         binding.viewModel = viewModel
 
         binding.run {
             lifecycleOwner = this@DetailBottomSheetDialogFragment
+            viewModel = this@DetailBottomSheetDialogFragment.viewModel
         }
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.predictedMatch.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { prediction ->
-                viewModel.prediction.set(prediction)
-            }
-            .disposedBy(bag)
-
-        viewModel.awayAdjustments.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { adjustment ->
-                viewModel.awayAdjustment.set(adjustment)
-            }
-            .disposedBy(bag)
-
-        viewModel.homeAdjustments.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { adjustment ->
-                viewModel.homeAdjustment.set(adjustment)
-            }
-            .disposedBy(bag)
-
-        viewModel.marketDatas.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { marketData ->
-                viewModel.marketData.set(marketData)
-            }
-            .disposedBy(bag)
-
-    }
-
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -107,8 +72,10 @@ class DetailBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
             BottomSheetBehavior.from(bottomSheet!!).state = BottomSheetBehavior.STATE_EXPANDED
 
-            val bottomSheetInternal = bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            BottomSheetBehavior.from(bottomSheetInternal).peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels
+            val bottomSheetInternal =
+                bottomSheet.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            BottomSheetBehavior.from(bottomSheetInternal).peekHeight =
+                Resources.getSystem().displayMetrics.heightPixels
 
         }
         return dialog

@@ -47,7 +47,6 @@ fun imageResolverId(key: String) : Int {
     if(key.equals(null)){
         return R.drawable.nfl_icon
     }
-
     return teamsMap[key]!!.toInt()
 }
 

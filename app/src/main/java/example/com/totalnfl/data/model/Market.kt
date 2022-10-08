@@ -3,6 +3,7 @@ package example.com.totalnfl.data.model
 import example.com.totalnfl.data.base.BaseModel
 
 data class Market(
+    override val id: Int = 0,
     val commonMatchId: String = "",
     val week: Int = 0,
     val awayName : String = "",

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import example.com.totalnfl.data.base.BaseApiModel
 
 data class MarketDto(
+    @SerializedName( "id") val id: Int = 0,
     @SerializedName( "commonMatchId") val commonMatchId: String = "",
     @SerializedName( "week") val week: Int = 0,
     @SerializedName( "awayTeam") val awayTeam: String = "",
@@ -11,6 +12,4 @@ data class MarketDto(
     @SerializedName( "marketTotal") val marketTotal: Double = 0.0,
     @SerializedName( "marketAwaySpread") val marketAwaySpread: Double = 0.0,
     @SerializedName( "marketHomeSpread") val marketHomeSpread: Double = 0.0,
-) : BaseApiModel {
-    constructor(): this("")
-}
+) : BaseApiModel

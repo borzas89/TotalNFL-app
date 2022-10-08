@@ -1,3 +1,5 @@
 package example.com.totalnfl.data.base
 
-interface BaseModel
+interface BaseModel{
+    val id : Int
+}

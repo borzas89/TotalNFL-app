@@ -7,6 +7,10 @@
         <variable
             name="viewModel"
             type="example.com.totalnfl.ui.list.ListViewModel"/>
+
+        <variable
+            name="adapter"
+            type="example.com.totalnfl.ui.list.PredictionAdapter"/>
     </data>
 
     <LinearLayout
@@ -49,7 +53,11 @@
             tools:listitem="@layout/list_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             bind:hasFixedSize="@{true}"
+            app:setAdapter="@{adapter}"
+            app:submitList="@{viewModel.predictionList}"
             app:isVisibleOrGone="@{viewModel.listViewVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
